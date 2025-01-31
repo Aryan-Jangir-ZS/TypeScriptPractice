@@ -1,120 +1,121 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
-const getWord = () => {
-const words = ["apple", "banana", "cherry", "date", "elderberry", "figure", "grape"];
-return words[Math.floor(Math.random() * words.length)];
-};
-const getRemainingGuess = () => 5;
+enum GameState {
+  Playing,
+  Won,
+  Lost,
+}
 
-const App: React.FC = () => {
-  const [word, setWord] = useState<string[]>(getWord().toLowerCase().split(""));
-  const [remainingGuesses, setRemainingGuesses] = useState(getRemainingGuess());
-  const [guessList, setGuessList] = useState<string[]>(Array(word.length).fill(""));
-  const [correctIndexes, setCorrectIndexes] = useState<number[]>([]);
-  const [prefilledIndexes, setPrefilledIndexes] = useState<number[]>([]);
-  const [status, setStatus] = useState<"Playing" | "Failed" | "Success">("Playing");
-  const [difficulty, setDifficulty] = useState<"Easy" | "Hard" | null>(null);
-  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+enum MessageType {
+  Correct = "CORRECT",
+  Almost = "ALMOST",
+  Wrong = "WRONG",
+}
+
+const WORDS = ["APPLE", "GRAPE", "MELON", "PEACH", "OLIVE"];
+const MAX_LIVES = 5;
+const WORD_TO_GUESS = WORDS[Math.floor(Math.random() * WORDS.length)];
+
+const WordGuessGame: React.FC = () => {
+  const [lives, setLives] = useState(MAX_LIVES);
+  const [guessedLetters, setGuessedLetters] = useState<string[]>(
+    Array(WORD_TO_GUESS.length).fill("")
+  );
+  const [message, setMessage] = useState<{ text: string; type: MessageType } | null>(null);
+  const [inputLetter, setInputLetter] = useState("");
+  const [gameState, setGameState] = useState<GameState>(GameState.Playing);
 
   useEffect(() => {
-    if (difficulty === "Easy") prefillEasyMode();
-  }, [difficulty]);
+    if (guessedLetters.join("") === WORD_TO_GUESS) {
+      setGameState(GameState.Won);
+    }
+  }, [guessedLetters]);
 
-  const prefillEasyMode = () => {
-    const prefillCount = Math.floor(Math.random() * 2) + 2;
-    const indexes = word.map((_, i) => i).sort(() => Math.random() - 0.5).slice(0, prefillCount);
-    const newGuesses = [...guessList];
-    indexes.forEach(i => newGuesses[i] = word[i]);
-    setGuessList(newGuesses);
-    setPrefilledIndexes(indexes);
-    setCorrectIndexes(indexes);
-  };
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const letter = event.target.value.toUpperCase();
+    if (!/^[A-Z]$/.test(letter)) return;
+    setInputLetter("");
 
-  const handleInputChange = (letter: string, index: number) => {
-    if (status !== "Playing" || correctIndexes.includes(index)) return;
+    const newGuessedLetters = [...guessedLetters];
+    let currentPosition = newGuessedLetters.findIndex(char => char === "");
     
-    const newLetter = letter.toLowerCase();
-    const updatedGuesses = [...guessList];
-    const prevLetter = updatedGuesses[index];
+    if (currentPosition === -1) return;
 
-    if (newLetter === word[index]) {
-      updatedGuesses[index] = newLetter;
-      setCorrectIndexes(prev => [...prev, index]);
-      autoFocusNextInput(index);
-    } else if (newLetter && prevLetter !== newLetter) {
-      if (!word.includes(newLetter)) {
-        setRemainingGuesses(prev => prev - 1);
-        updatedGuesses[index] = newLetter;
-        setTimeout(() => {
-          updatedGuesses[index] = "";
-          setGuessList([...updatedGuesses]);
-        }, 1000);
-      } else updatedGuesses[index] = newLetter;
+    if (WORD_TO_GUESS[currentPosition] === letter) {
+      newGuessedLetters[currentPosition] = letter;
+      setGuessedLetters(newGuessedLetters);
+      setMessage({ text: `Correct position for ${letter}!`, type: MessageType.Correct });
+    } else {
+      if (WORD_TO_GUESS.includes(letter)) {
+        setMessage({ text: `${letter} is correct but wrong position!`, type: MessageType.Almost });
+      } else {
+        setMessage({ text: `${letter} is not in the word!`, type: MessageType.Wrong });
+        setLives(l => l - 1);
+      }
     }
 
-    setGuessList(updatedGuesses);
-  };
-
-  const autoFocusNextInput = (currentIndex: number) => {
-    const nextIndex = guessList.findIndex((_, i) => 
-      i > currentIndex && !correctIndexes.includes(i) && !prefilledIndexes.includes(i)
-    );
-    inputsRef.current[nextIndex]?.focus();
+    setTimeout(() => setMessage(null), 2000);
   };
 
   useEffect(() => {
-    if (remainingGuesses <= 0) setStatus("Failed");
-    else if (guessList.every((char, i) => char === word[i])) setStatus("Success");
-  }, [guessList, remainingGuesses]);
+    if (lives <= 0) setGameState(GameState.Lost);
+  }, [lives]);
 
   const resetGame = () => {
-    setWord(getWord().toLowerCase().split(""));
-    setRemainingGuesses(getRemainingGuess());
-    setGuessList(Array(word.length).fill(""));
-    setCorrectIndexes([]);
-    setPrefilledIndexes([]);
-    setStatus("Playing");
-    setDifficulty(null);
+    setLives(MAX_LIVES);
+    setGuessedLetters(Array(WORD_TO_GUESS.length).fill(""));
+    setMessage(null);
+    setGameState(GameState.Playing);
   };
-
-  const getColor = (char: string, index: number) => 
-    !char ? "" : correctIndexes.includes(index) ? "correct" : 
-    word.includes(char) ? "wrong-position" : "incorrect";
-
-  if (!difficulty) return (
-    <div className="difficulty-container">
-      <h1>Choose Difficulty</h1>
-      <button className="level-button" onClick={() => setDifficulty("Easy")}>Easy</button>
-      <button onClick={() => setDifficulty("Hard")}>Hard</button>
-    </div>
-  );
 
   return (
     <div className="game-container">
-      <h1 className="game-title">
-        {status === "Success" ? "🎉 You Won!" : status === "Failed" ? "😢 Game Over!" : "Guess the Word"}
-      </h1>
-      <div className="word-container">
-        {guessList.map((char, index) => (
-          <input
-            key={index}
-            className={`letter-input ${prefilledIndexes.includes(index) ? "prefilled" : getColor(char, index)}`}
-            value={char.toUpperCase()}
-            maxLength={1}
-            readOnly={correctIndexes.includes(index) || prefilledIndexes.includes(index)}
-            ref={el => inputsRef.current[index] = el}
-            onChange={e => handleInputChange(e.target.value, index)}
-            onKeyDown={e => e.key === "Backspace" && (guessList[index] = "")}
-          />
+      <div className="lives-container">
+        {Array(lives).fill("❤️").map((_, i) => (
+          <span key={i} className="heart">{'❤️'}</span>
         ))}
       </div>
-      <div className="status-container">
-        <p className="lives">Lives Remaining: {remainingGuesses}</p>
+      
+      <div className="word-container">
+        {guessedLetters.map((letter, i) => (
+          <div key={i} className={`letter-block ${letter ? 'filled' : ''}`}>
+            {letter || <span className="empty-char">?</span>}
+          </div>
+        ))}
       </div>
-      {status !== "Playing" && <button onClick={resetGame}>Play Again</button>}
+
+      <div className="message-container">
+        {message && (
+          <div className={`message ${message.type.toLowerCase()}`}>
+            {message.text}
+          </div>
+        )}
+      </div>
+
+      <div className="input-container">
+        <input
+          type="text"
+          className="styled-input"
+          value={inputLetter}
+          onChange={handleInput}
+          maxLength={1}
+          disabled={gameState !== GameState.Playing}
+          placeholder="Enter letter"
+        />
+      </div>
+
+      {gameState !== GameState.Playing && (
+        <div className="modal">
+          <h3>{gameState === GameState.Won ? "🎉 You Won!" : "😢 Game Over"}</h3>
+          <p>The word was: {WORD_TO_GUESS}</p>
+          <button className="reset-button" onClick={resetGame}>
+            Play Again
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default App;
+export default WordGuessGame;

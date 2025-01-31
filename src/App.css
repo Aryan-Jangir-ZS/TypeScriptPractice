@@ -1,116 +1,141 @@
 :root {
-  --bg-color: #f9f9f9;
-  --text-color: #333;
-  --primary-color: #4caf50;
-  --secondary-color: #ff9800;
-  --danger-color: #f44336;
-  --prefilled-color: #d4edda;
-  --input-border: #ccc;
+  --primary: #4a90e2;
+  --success: #50bf50;
+  --warning: #ffb800;
+  --danger: #ff4d4d;
+  --background: #f5f7fa;
+  --text: #2d3748;
+  --input-bg: #f8f9fc;
 }
 
 body {
   margin: 0;
-  font-family: "Inter", Arial, sans-serif;
-  background-color: var(--bg-color);
+  font-family: 'Segoe UI', system-ui;
+  background: var(--background);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  color: var(--text-color);
+  color: var(--text);
 }
 
-.game-container, .difficulty-container {
-  text-align: center;
+.game-container {
+  background: white;
   padding: 2rem;
   border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 400px;
+  max-width: 500px;
+  position: relative;
 }
 
-.level-button{
-  margin-right: 20px;
-}
-.game-title, .difficulty-container h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--text-color);
+.lives-container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  color: var(--danger);
 }
 
 .word-container {
   display: flex;
+  gap: 0.8rem;
   justify-content: center;
-  gap: 0.5rem;
+  margin: 2rem 0;
+}
+
+.letter-block {
+  width: 3.5rem;
+  height: 3.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: var(--input-bg);
+  transition: all 0.2s ease;
+}
+
+.letter-block.filled {
+  border-color: var(--success);
+  background: rgba(80, 191, 80, 0.1);
+}
+
+.empty-char {
+  color: #cbd5e0;
+}
+
+.input-container {
+  margin-top: 1.5rem;
+  padding: 0 1rem;
+}
+
+.styled-input {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  text-align: center;
+  text-transform: uppercase;
+  background: var(--input-bg);
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+
+.styled-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.styled-input::placeholder {
+  color: #a0aec0;
+  font-weight: 300;
+}
+
+
+.message-container {
+  min-height: 60px;
   margin: 1rem 0;
 }
 
-.letter-input {
-  width: 3rem;
-  height: 3rem;
-  font-size: 1.5rem;
+.message {
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
   text-align: center;
-  border-radius: 8px;
-  border: 2px solid var(--input-border);
-  outline: none;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.letter-input.correct {
-  border-color: var(--primary-color);
-  background-color: rgba(76, 175, 80, 0.2);
+.message.correct { background: var(--success); color: white; }
+.message.almost { background: var(--warning); color: white; }
+.message.wrong { background: var(--danger); color: white; }
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.letter-input.wrong-position {
-  border-color: var(--secondary-color);
-  background-color: rgba(255, 152, 0, 0.2);
-}
-
-.letter-input.incorrect {
-  border-color: var(--danger-color);
-  background-color: rgba(244, 67, 54, 0.2);
-}
-
-.letter-input.prefilled {
-  background-color: var(--prefilled-color);
-  border-color: var(--primary-color);
-}
-
-button {
-  padding: 0.8rem 1.5rem;
-  font-size: 1rem;
+.reset-button {
+  background: var(--primary);
+  color: white;
   border: none;
-  border-radius: 8px;
-  background-color: var(--primary-color);
-  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.2s ease;
 }
 
-button:hover {
-  background-color: #388e3c;
-}
-
-.correct {
-  background-color: #28a745; 
-  color: white;
-  border: 2px solid #1e7a34;
-}
-
-.wrong-position {
-  background-color: #ffc107;
-  color: black;
-  border: 2px solid #e0a800;
-}
-
-.incorrect {
-  background-color: #dc3545;
-  color: white;
-  border: 2px solid #bd2130;
-}
-
-.prefilled {
-  background-color: #17a2b8;
-  color: white;
-  border: 2px solid #117a8b;
+.reset-button:hover {
+  background: #357abd;
 }
