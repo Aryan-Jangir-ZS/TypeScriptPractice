@@ -10,7 +10,7 @@ interface Product {
 }
 
 const getData = async () => {
-  const response = await fetch("https://dummyjson.com/products?limit=100");
+  const response = await fetch("https://dummyjson.com/products?limit=12");
   const data = await response.json();
   return data;
 };
@@ -18,7 +18,6 @@ const getData = async () => {
 const Pagination: React.FC = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 10; 
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -32,6 +31,7 @@ const Pagination: React.FC = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = allProducts.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(allProducts.length/itemsPerPage); 
 
   return (
     <div className="pagination-wrapper">

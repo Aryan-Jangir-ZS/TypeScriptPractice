@@ -1,143 +1,230 @@
 .pagination-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 60vh;
-    padding: 20px;
-    width: 1100px;
-    margin: 0 auto; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.card-container {
+  display: grid;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 2/3;
+  background-color: white;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.img-container {
+  position: relative;
+  width: 70%;
+  height: 10%;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+  
+}
+
+.img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  padding: 0.2rem;
+  padding-top: 1.75rem;
+}
+
+.card:hover .img {
+  transform: scale(1.05);
+}
+
+.card p {
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  color: #1f2937;
+  text-align: center;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+  width: 100%;
+  display: block;
+  line-height: 1.4;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  margin-top: auto;
+}
+
+.pagination-container button {
+  min-width: 40px;
+  height: 40px;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  color: #4b5563;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-container button:hover:not(:disabled) {
+  background-color: #f8fafc;
+  color: #1f2937;
+  border-color: #cbd5e1;
+}
+
+.pagination-container button.active {
+  background-color: #108983;
+  color: white;
+  border-color: #108983;
+}
+
+.pagination-container button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pagination-container .nav-button {
+  font-weight: bold;
+  color: #4b5563;
+}
+
+.dots {
+  color: #4b5563;
+  padding: 0 0.25rem;
+}
+
+@media (max-width: 1024px) {
+  .card-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pagination-wrapper {
+    padding: 0.75rem;
   }
 
-  .dots{
-    color:white;
-  }
-  
   .card-container {
-    display: grid;
-    gap: 20px;
-    padding: 20px 0;
-    flex-grow: 1;
-    
-    grid-template-columns: repeat(4, 2fr );
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 0.5rem;
   }
-  
+}
+
+@media (max-width: 640px) {
+  .pagination-wrapper {
+    padding: 0.5rem;
+  }
+
+  .card-container {
+    padding: 0.25rem;
+  }
+
   .card {
-    border: 2px solid #dad2d2;
-    border-radius: 12px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.2s;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    overflow: hidden;
+    padding: 0.5rem;
+
   }
-  
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  .img{
+    padding-top: 1.5rem;
+
   }
-  
-  .img {
-    width: 100px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    transition: transform 0.3s ease;
-  }
-  
-  .card:hover .img {
-    transform: scale(1.2);
+
+  .img-container {
+    height: 60%;
+    margin-bottom: 0.5rem;
   }
 
   .card p {
-    margin: 8px 0;
-    font-size: 1rem;
-    color: #333;
-    text-align: center;
-    font-weight: 600;
-    line-height: 1;
-    
+    font-size: 0.85rem;
+    padding: 0.25rem;
   }
-  
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    padding: 20px;
-    flex-wrap: wrap;
-  }
-  
-  .pagination-container button {
-    padding: 8px 16px;
-    border: none;
-    background-color: #f8f9fa;
-    color: #333;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    min-width: 42px;
-    font-weight: 500;
-  }
-  
-  .pagination-container button:hover:not(:disabled) {
-    background-color: #e9ecef;
-    color:#333;
-    transform: translateY(-1px);
-  }
-  
-  .pagination-container button.active {
-    background-color: #108983;
-    color: white;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
-  }
-  
-  .pagination-container button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-  
- 
-  @media (max-width: 1024px) {
-    .card-container {
-      grid-template-columns: repeat(3, 1fr);
-    }
-    .pagination-container button {
-        padding: 6px 12px;
-        font-size: 0.85rem;
-        min-width: 36px;
-      }
-      
-      .card p {
-        font-size: 0.9rem;
-      }
-  }
-  
-  @media (max-width: 768px) {
-    .card-container {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .card-container {
-      grid-template-columns: 1fr;
-    }
-     
-    .pagination-container {
-        gap: 4px;
-      }
-      
-      .pagination-container button {
-        padding: 6px 10px;
-        min-width: 32px;
-      }
-  }
-  
-    
 
-  
-  
+  .pagination-container button {
+    min-width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-wrapper {
+    padding: 0.5rem;
+  }
+
+  .card-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .card {
+    aspect-ratio: 1/1.4; 
+    
+  }
+
+  .img-container {
+    height: 55%;
+  }
+  .img{
+    padding-top: 1.4rem;
+
+  }
+
+  .card p {
+    font-size: 0.8rem;
+  }
+
+  .pagination-container {
+    gap: 0.25rem;
+    padding: 1.5rem 0.5rem;
+  }
+
+  .pagination-container button {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+}
