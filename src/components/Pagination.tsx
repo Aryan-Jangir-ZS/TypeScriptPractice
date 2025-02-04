@@ -10,7 +10,7 @@ interface Product {
 }
 
 const getData = async () => {
-  const response = await fetch("https://dummyjson.com/products?limit=12");
+  const response = await fetch("https://dummyjson.com/products?limit=65");
   const data = await response.json();
   return data;
 };

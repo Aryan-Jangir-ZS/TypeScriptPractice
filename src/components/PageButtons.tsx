@@ -57,7 +57,6 @@ const PageButtons: React.FC<PageButtonsProps> = ({
         &lt;
       </button>
 
-      {currentPage > 2 && totalPages > 3 && <span className="dots">...</span>}
 
       {getPageNumbers().map((page) => (
         <button
@@ -69,7 +68,6 @@ const PageButtons: React.FC<PageButtonsProps> = ({
         </button>
       ))}
 
-      {currentPage < totalPages - 1 && totalPages > 3 && <span className="dots">...</span>}
 
       <button 
         className="nav-button"
