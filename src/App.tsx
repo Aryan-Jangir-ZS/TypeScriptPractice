@@ -50,7 +50,7 @@ const WordGuessGame: React.FC = () => {
       if (WORD_TO_GUESS.includes(letter)) {
         setMessage({ text: `${letter} is correct but wrong position!`, type: MessageType.Almost });
       } else {
-        setMessage({ text: `${letter} is not in the word!`, type: MessageType.Wrong });
+        setMessage({ text: `${letter} is not in the word! you lost a life`, type: MessageType.Wrong });
         setLives(l => l - 1);
       }
     }
