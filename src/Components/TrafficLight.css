@@ -1,0 +1,53 @@
+
+.traffic-light {
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.light {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.light.red {
+  background-color: #ff0000;
+  box-shadow: 0 0 20px #ff0000;
+}
+
+.light.red.off {
+  background-color: #3f0000;
+  box-shadow: none;
+}
+
+.light.yellow {
+  background-color: #ffff00;
+  box-shadow: 0 0 20px #ffff00;
+}
+
+.light.yellow.off {
+  background-color: #3f3f00;
+  box-shadow: none;
+}
+
+.light.green {
+  background-color: #00ff00;
+  box-shadow: 0 0 20px #00ff00;
+}
+
+.light.green.off {
+  background-color: #003f00;
+  box-shadow: none;
+}
+
+.status-text {
+  margin-top: 20px;
+  color: white;
+  font-size: 20px;
+} 
